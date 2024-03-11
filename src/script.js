@@ -23,9 +23,12 @@ app.use(express.json())
 // Async e await pois a resposta do bcrypt retorna uma promisse 
 
 app.post('/criar-usuario', async (request, response) => {
-    const nomePessoaUsuaria = request.body.nomePessoaUsuaria
-    const emailPessoaUsuaria = request.body.emailPessoaUsuaria
-    const senhaPessoaUsuaria = request.body.senhaPessoaUsuaria
+    const{nomePessoaUsuaria, emailPessoaUsuaria,senhaPessoaUsuaria} = request.body
+
+    console.log(nomePessoaUsuaria)
+
+    console.log(emailPessoaUsuaria)
+    console.log(senhaPessoaUsuaria)
 
     try {
 
