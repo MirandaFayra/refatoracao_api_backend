@@ -211,6 +211,56 @@ app.delete('/produtos/:nomeProdutoDeletado',(request, response)=>{{
 }})
 
 
+//------- PAGINACAO -------
+
+/* 
+
+    LOJA 20 PRODUTOS CADASTRADOS 
+
+    LIMITE = MOSTRAR DE 5 EM 5 PRODUTOS 
+
+    QUANTIDADE  LIMITE DE ELEMENTOS POR PÁGINA = 5
+
+    PÁGINA 1 = 1 A 5 
+    PÁGINA 2 = 6 A 10
+    PAGINA 3 = 11 A 15 
+    PAGINA 4 = 16 A 20
+
+    DE ONDE COMECA = OFFSET
+    
+
+*/
+
+app.get('/produtos/paginados',(request, response)=>{
+    try {
+
+        if(listaProdutos.length === 0){
+            return response.status(400).send({message:'A lista está vazia'})
+        }
+
+        const limit = parseInt(request.query.limit)  
+        const offset = parseInt(request.query.offset)
+
+        const itensPorPaginaPositivo = Math.random(0,offset)
+
+        const produtosPaginados = listaProdutos.slice(itensPorPaginaPositivo, itensPorPaginaPositivo + limit)
+
+        request.status(200).json({
+            sucess:true, 
+            message:'Produtos retornados com sucesso', 
+            data: produtosPaginados, 
+            totalProdutos: listaProdutos.length,
+            paginaAtual : (itensPorPaginaPositivo/limit),
+            totalPaginas : (listaProdutos.length/limit),
+            quantidadePorPagina : limit
+        })
+        
+    } catch (error) {
+        response.status(500).send({message:'Erro interno'})
+    }
+})
+
+
 //------- VERIFICAR API  -------
 
 app.listen(PORT, () => console.log("Servidor iniciado na porta 8080"))
