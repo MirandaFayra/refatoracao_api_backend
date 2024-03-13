@@ -239,18 +239,22 @@ app.get('/produtos/paginados',(request, response)=>{
     
         const limit = parseInt(request.query.limit)  
         const offset = parseInt(request.query.offset)
-    
-        const itensPorPaginaPositivo = Math.random(0,offset)
 
-        const produtosPaginados = listaProdutos.slice(itensPorPaginaPositivo, itensPorPaginaPositivo + limit)
+        // Corrige a posição do offset considerando que o array inicia do zero
+        const posicaoOffset = offset - 1
 
+        const produtosPaginados = listaProdutos.slice( posicaoOffset ,  posicaoOffset  + limit)
+
+
+
+        //  paginaAtual : Math.floor(posicaoOffset/limit)+1 => Calculo da página, com base na posicao do offset. Onde posicaoOffset, indica a posicao inicial de onde vamos começar / quantidade de itens por página / Math.floor, considera páginas inteiras. Somamos 1 por que o array inicia com zero
 
         response.status(200).json({
             sucess:true, 
             message:'Produtos retornados com sucesso', 
             data: produtosPaginados, 
             totalProdutos: listaProdutos.length,
-            paginaAtual : Math.floor(itensPorPaginaPositivo/limit)+1,
+            paginaAtual : Math.floor(posicaoOffset/limit)+1,
             totalPaginas : Math.ceil(listaProdutos.length/limit),
             quantidadePorPagina : limit
         })
