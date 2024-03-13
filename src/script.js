@@ -230,6 +230,9 @@ app.delete('/produtos/:nomeProdutoDeletado',(request, response)=>{{
 
 */
 
+/*
+
+//OUTRA FORMA DE FAZER 
 app.get('/produtos/paginados',(request, response)=>{
     try {
 
@@ -263,7 +266,36 @@ app.get('/produtos/paginados',(request, response)=>{
         response.status(500).send({message:'Erro interno'})
     }
 })
+*/ 
 
+app.get("/produtos/paginados/:page", (request, response) => {
+    try {
+      if (listaProdutos.length === 0) {
+        return response.status(400).send({ message: "A lista está vazia" });
+      }
+  
+      const limit = parseInt(request.query.limit) || 5
+      const page = parseInt(request.params.page) || 1
+  
+      // Corrige a posição do offset considerando que o array inicia do zero
+      const offset = (page - 1) * limit;
+  
+      const produtosPaginados = listaProdutos.slice(offset, offset + limit);
+  
+      response.status(200).json({
+        sucess: true,
+        message: "Produtos retornados com sucesso",
+        data: produtosPaginados,
+        totalProdutos: listaProdutos.length,
+        paginaAtual: page,
+        totalPaginas: Math.ceil(listaProdutos.length / limit),
+        quantidadePorPagina: limit,
+      });
+    } catch (error) {
+      response.status(500).send({ message: "Erro interno" });
+    }
+  });
+  
 
 //------- VERIFICAR API  -------
 
