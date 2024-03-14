@@ -25,11 +25,6 @@ app.use(express.json())
 app.post('/criar-usuario', async (request, response) => {
     const{nomePessoaUsuaria, emailPessoaUsuaria,senhaPessoaUsuaria} = request.body
 
-    console.log(nomePessoaUsuaria)
-
-    console.log(emailPessoaUsuaria)
-    console.log(senhaPessoaUsuaria)
-
     try {
 
         if (!nomePessoaUsuaria) {
@@ -268,19 +263,19 @@ app.get('/produtos/paginados',(request, response)=>{
 })
 */ 
 
-app.get("/produtos/paginados/:page", (request, response) => {
+app.get("/produtos/paginados", (request, response) => {
     try {
       if (listaProdutos.length === 0) {
         return response.status(400).send({ message: "A lista está vazia" });
       }
   
-      const limit = parseInt(request.query.limit) || 5
-      const page = parseInt(request.params.page) || 1
+      const limit = parseInt(request.query.limit) || 6
+      const page = parseInt(request.query.page) || 1
   
       // Corrige a posição do offset considerando que o array inicia do zero
-      const offset = (page - 1) * limit;
+      const offset = (page - 1) * limit
   
-      const produtosPaginados = listaProdutos.slice(offset, offset + limit);
+      const produtosPaginados = listaProdutos.slice(offset, offset + limit)
   
       response.status(200).json({
         sucess: true,
@@ -290,11 +285,12 @@ app.get("/produtos/paginados/:page", (request, response) => {
         paginaAtual: page,
         totalPaginas: Math.ceil(listaProdutos.length / limit),
         quantidadePorPagina: limit,
-      });
+      })
     } catch (error) {
       response.status(500).send({ message: "Erro interno" });
     }
-  });
+})
+
   
 
 //------- VERIFICAR API  -------
